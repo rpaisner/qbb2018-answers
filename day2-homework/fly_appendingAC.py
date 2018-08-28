@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+""" I am going to make my fly_data from the parsed version of fly.txt and my t_data from the ctab file we were working on in class"""
 import sys
 fly_data = open( sys.argv[1] )
 t_data = open( sys.argv[2] )
