@@ -8,9 +8,9 @@ fly_dict = {}
 for line in fly_data:
     fields = line.rstrip("\r\n").split()
     fly_dict[fields[0]] = fields[1]
-print(fly_dict)
 
 for line2 in t_data:
+    line2=line2.strip()
     count = 0
     if "FBgn" in line2:
         fields2 = line2.rstrip("\r\n").split()
@@ -20,4 +20,4 @@ for line2 in t_data:
                 count = count + 1
         else:
             if sys.argv[3] == 'print':
-                print('Found no match')
+                print('Found no match', "\t", line2)
