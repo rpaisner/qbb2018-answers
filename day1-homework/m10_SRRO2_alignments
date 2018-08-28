@@ -1,0 +1,3 @@
+/Users/cmdb/qbb2018-answers/genomes $ cut -f 3 m10_SRRO.sam | grep -v "^211" > m10_SRRO2.sam
+
+/Users/cmdb/qbb2018-answers/genomes $ datamash -s -g 1 count 1 <m10_SRRO2.sam 
