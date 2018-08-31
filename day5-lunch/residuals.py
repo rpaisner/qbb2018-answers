@@ -12,7 +12,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import statsmodels.api as sm
-import statsmodels.formula.api as smf
+from statsmodels.sandbox.regression.predstd import wls_prediction_std
+import seaborn as sns
 
 mean1 = pd.read_table( sys.argv[1], index_col=0 ).iloc[:,5-1]
 mean2 = pd.read_table( sys.argv[2], index_col=0 ).iloc[:,5-1]
@@ -43,18 +44,8 @@ small_df = df.loc[roi,:]
 y = small_df.loc[:,cname1]
 x = small_df.loc[:,[name1,name2,name3,name4,name5]]
 
-small_df.columns = small_df.columns.str.replace(".","_")
-# print(small_df)
-#
-mod = smf.ols(formula='t_data_ctab ~ H3K27ac_tab + H3K27me3_tab + H3K4me1_tab + H3K4me3_tab + H3K9ac_tab', data=small_df)
-res = mod.fit()
-print(res.summary())
+sns.set(style="whitegrid")
+sns.residplot(x,y,lowess=True,color="g")
 
-fig, ax = plt.subplots()
-fig.suptitle("Regression with Residuals FPKMs + 1")
-ax.hist(res.resid, bins =500)
-ax.set_xlim(-300,300)
-fig.savefig("residuals.png")
-plt.close(fig)
-
-# ax.plot(x, res.fittedvalues)
+fig.savfig("residualplot.png")
+plt.close()
