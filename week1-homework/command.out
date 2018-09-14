@@ -1,0 +1,9 @@
+blastn -remote -db nr -query week1_query.fa -max_target_seqs 1000 -evalue .0001 -outfmt "6 sseqid sseq" -ungapped -out homologous_seq.fa
+
+/Users/cmdb/Desktop/fasta_maker.py homologous_seq.fa > hspnuc.fa
+
+transeq -sequence hspnuc.fa -outseq proteinHSP.fa
+
+mafft proteinHSP.fa > aligned_proteinHSP.fa
+
+./protein_to_codon.py hspnuc.fa aligned_proteinHSP.fa
