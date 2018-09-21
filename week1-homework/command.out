@@ -6,4 +6,8 @@ transeq -sequence hspnuc.fa -outseq proteinHSP.fa
 
 mafft proteinHSP.fa > aligned_proteinHSP.fa
 
+<<<<<<< HEAD
 ./protein_to_codon.py hspnuc.fa aligned_proteinHSP.fa 
+=======
+./protein_to_codon.py hspnuc.fa aligned_proteinHSP.fa
+>>>>>>> 0372a188fa943836fe75ed1599cbdb205c110ef5
