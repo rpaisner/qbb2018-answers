@@ -38,6 +38,17 @@ for i, pos in enumerate(bp):
         positions.append(count + difference)
         count += difference
 
+xticks_labels = []
+
+#print(x_labels_pos)
+for i in range(len(x_labels_pos)):
+    if i+1 >= len(x_labels_pos):
+        xticks_labels.append(x_labels_pos[i])    
+    else:
+        xticks_labels.append((x_labels_pos[i] + x_labels_pos[i+1])/2)
+
+# print(xticks_labels)
+
 
 p_Val = -np.log(df.loc[:,"P"])
 df2 = df.assign(pvalue=p_Val, position=positions)
@@ -45,10 +56,10 @@ df2.to_csv(sys.stdout, sep="\t")
 
 # adding significant values as different color
 pval = df2.loc[:,"P"]
-print(pval)
+# print(pval)
 pval2 = df.iloc[i]["P"]
 
-# this is to make a new col of significant values, and append only those that are greater than p = .00001
+# # this is to make a new col of significant values, and append only those that are greater than p = .00001
 
 df2.loc[df2['pvalue'] > 5, 'Sigval'] = df2['pvalue']
 # print(df2)
@@ -56,22 +67,26 @@ df2.loc[df2['pvalue'] > 5, 'Sigval'] = df2['pvalue']
 # this is to assign the chromosome column by its type
 df2.CHR = df2.CHR.astype('category')
 df2.CHR = df2.CHR.cat.set_categories((
-    'chrI', 'chrII', 'chrIII', 'chrIV', 'chrV', 'chrVI', 'chrVII', 'chrVIII', 'chrIX', 'chrX', \
-    'chrXI', 'chrXII', 'chrXIII', 'chrXIV', 'chrXV', 'chrXVI', '23', '26'), ordered=True)
+    'chrI', 'chrII', 'chrIII', 'chrIV', 'chrIX', '26', 'chrV', 'chrVI', 'chrVII', 'chrVIII', '23', 'chrXI', 'chrXII', 'chrXIII', 'chrXIV', 'chrXV', 'chrXVI'), ordered=True)
 
 groups = df2.groupby('CHR')
 
-# for plotting
+a = []
+a.append((df['CHR'].unique()))
+print(a)
+
+#for plotting
 
 fig, ax = plt.subplots(figsize=(16,8))
 x_labels = []
 for (name, group) in (groups):
-    ax.scatter(group.position, group.pvalue, s=0.2)
+    ax.scatter(group.position, group.pvalue, s=0.2, label=name)
     x_labels.append(name)
 ax.scatter(x=df2.loc[:,"position"],y=df2.loc[:,"Sigval"], color="black", marker="x", s= 1, label='Significant Values')
 plt.legend(loc='upper right')
 ax.set_xticklabels(x_labels, rotation=50, fontsize=7)
-ax.set_xticks(x_labels_pos)
+ax.set_xticks(xticks_labels)
+#ax.set_xticks(x_labels_pos)
 ax.set_xlabel("SNPs at Chromosomes")
 ax.set_ylabel("-log(p-value)")
 ax.set_title(sys.argv[1][6: -7] + " GWAS")
