@@ -1,0 +1,40 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1561\cocoasubrtf600
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww15780\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\ri0\partightenfactor0
+
+\f0\fs24 \cf0 bowtie2-build\'a0chr19.fa\'a0Chr19\
+\
+bowtie2 -q -x Chr19 -U input_G1E.fastq -S input_G1E.sam \
+\
+bowtie2 -q -x Chr19 -U input_ER4.fastq -S input_ER4.sam\
+\
+bowtie2 -q -x Chr19 -U CTCF_G1E.fastq -S CTCF_G1E.sam\
+bowtie2 -q -x Chr19 -U CTCF_ER4.fastq -S CTCF_E14.sam\
+\
+\
+\
+macs2 callpeak -t CTCF_ER4.sam -c input_ER4.sam -f SAM -n ER4 --outdir ER4\
+\
+macs2 callpeak -t CTCF_G1E.sam -c input_G1E.sam -f SAM -n ER4 --outdir ER4\
+\
+\
+bedtools intersect -a ./G1E/G1E_peaks.narrowPeak -b ./ER4/ER4_peaks.narrowPeak -v > CTCF_lost.bed\
+\
+bedtools intersect -a ./ER4/ER4_peaks.narrowPeak -b ./G1E/G1E_peaks.narrowPeak -v > CTCF_gained.bed\
+\
+bedtools sort -i ER4/ER4_peaks.narrowPeak > ER4_sorted.bed\
+bedtools sort -i G1E/G1E_peaks.narrowPeak > G1E_sorted.bed\
+./features.py features_sorted.bed\
+bedtools intersect -a ER4_sorted.bed -b features_exon.bed -v > ER4_exons.bed\
+bedtools intersect -a ER4_sorted.bed -b features_intron.bed -v > ER4_introns.bed\
+bedtools intersect -a ER4_sorted.bed -b features_promoter.bed -v > ER4_promoters.bed\
+bedtools intersect -a G1E_sorted.bed -b features_exon.bed -v > G1E_exons.bed\
+bedtools intersect -a G1E_sorted.bed -b features_intron.bed -v > G1E_introns.bed\
+bedtools intersect -a G1E_sorted.bed -b features_promoter.bed -v > G1E_promoters.bed\
+\
+./peakscounter.py CTCF_gained.bed CTCF_lost.bed ER4_exons.bed ER4_introns.bed ER4_promoters.bed G1E_exons.bed G1E_introns.bed G1E_promoters.bed\
+}
