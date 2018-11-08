@@ -1,0 +1,7 @@
+
+
+sort -n -r -k 9 ER4_peaks.narrowPeak | head -n 100 > ER4_sorted1_.narrowpeak
+bedtools getfasta -fi chr19.fa -bed ER4_sorted1_.narrowpeak > ER4_fasta_meme.fa
+meme-chip -meme-maxw 20 -db JASPAR_CORE_2016_vertebrates.meme ER4_fasta_meme.fa
+
+bedtools intersect -a /Users/cmdb/qbb2018-answers/Week8/memechip_out/fimo_out_1/fimo.gff -b ER4_peaks.narrowPeak -wa -wb > ER4_peaks.narrowPeak.bed
